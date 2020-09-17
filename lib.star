@@ -1,8 +1,11 @@
-def task(name, instance, env={}, instructions=[]):
+def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     result = {
         'name': name,
         'env': env,
+        'depends_on': depends_on
     }
+    if alias != "":
+        result['alias'] = alias
     result.update(instance.items())
     for instruction in instructions:
         result.update(instruction.items())
