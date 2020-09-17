@@ -12,6 +12,18 @@ def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     return result
 
 
+def cache(name, folder, fingerprint_script=[], populate_script=[]):
+    cache_obj = {'folder': folder}
+    if len(fingerprint_script) > 0:
+        cache_obj['fingerprint_script'] = fingerprint_script
+    if len(populate_script) > 0:
+        cache_obj['populate_script'] = populate_script
+
+    return {
+        name + '_cache': cache_obj
+    }
+
+
 def script(name, *lines):
     return {
         name + '_script': lines
