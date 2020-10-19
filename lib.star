@@ -1,9 +1,11 @@
 def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     result = {
         'name': name,
-        'env': env,
-        'depends_on': depends_on
     }
+    if env:
+        result["env"] = env
+    if depends_on:
+        result["depends_on"] = depends_on
     if alias != "":
         result['alias'] = alias
     result.update(instance.items())
