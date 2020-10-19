@@ -1,0 +1,65 @@
+task:
+  name: task with a default container
+  container:
+    cpu: 2
+    memory: 4096
+
+task:
+  name: task with an environment
+  env:
+    A: B
+  container:
+    cpu: 2
+    memory: 4096
+
+task:
+  name: task with a cache instruction
+  container:
+    cpu: 2
+    memory: 4096
+  node_modules_cache:
+    folder: node_modules
+
+task:
+  name: task with a script instruction
+  container:
+    cpu: 2
+    memory: 4096
+  test_script:
+    - go test -v folder1
+    - go test -v folder2
+
+task:
+  name: task with an artifacts instruction
+  container:
+    cpu: 2
+    memory: 4096
+  junit_artifacts:
+    path: junit.xml
+
+task:
+  name: task with a script that runs always
+  container:
+    cpu: 2
+    memory: 4096
+  always:
+    do_always_script:
+      - "true"
+
+task:
+  name: task with a script that runs on failure
+  container:
+    cpu: 2
+    memory: 4096
+  on_failure:
+    do_on_failure_script:
+      - "true"
+
+task:
+  name: task with a script that runs on success
+  container:
+    cpu: 2
+    memory: 4096
+  on_success:
+    do_on_success_script:
+      - "true"

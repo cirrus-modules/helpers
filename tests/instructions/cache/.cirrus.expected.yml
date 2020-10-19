@@ -1,0 +1,25 @@
+task:
+  name: basic cache instruction
+  container:
+    cpu: 2
+    memory: 4096
+  node_modules_cache:
+    folder: node_modules
+
+task:
+  name: cache instruction with fingerprint script
+  container:
+    cpu: 2
+    memory: 4096
+  node_modules_cache:
+    folder: node_modules
+    fingerprint_script: cat package-lock.json
+
+task:
+  name: cache instruction with populate script
+  container:
+    cpu: 2
+    memory: 4096
+  node_modules_cache:
+    folder: node_modules
+    populate_script: npm ci
