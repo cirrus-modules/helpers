@@ -3,7 +3,6 @@ task:
   container:
     cpu: 2
     memory: 4096
-
 task:
   name: task with an environment
   env:
@@ -11,7 +10,6 @@ task:
   container:
     cpu: 2
     memory: 4096
-
 task:
   name: task with a cache instruction
   container:
@@ -19,7 +17,6 @@ task:
     memory: 4096
   node_modules_cache:
     folder: node_modules
-
 task:
   name: task with a script instruction
   container:
@@ -28,7 +25,6 @@ task:
   test_script:
     - go test -v folder1
     - go test -v folder2
-
 task:
   name: task with an artifacts instruction
   container:
@@ -36,7 +32,6 @@ task:
     memory: 4096
   junit_artifacts:
     path: junit.xml
-
 task:
   name: task with a script that runs always
   container:
@@ -45,7 +40,6 @@ task:
   always:
     do_always_script:
       - "true"
-
 task:
   name: task with a script that runs on failure
   container:
@@ -54,7 +48,6 @@ task:
   on_failure:
     do_on_failure_script:
       - "true"
-
 task:
   name: task with a script that runs on success
   container:

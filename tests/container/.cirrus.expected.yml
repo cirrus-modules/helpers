@@ -3,21 +3,18 @@ task:
   container:
     cpu: 2
     memory: 4096
-
 task:
   name: task with a container instantiated from debian:latest image
   container:
     image: debian:latest
     cpu: 2
     memory: 4096
-
 task:
   name: task with a container built from Dockerfile
   container:
     dockerfile: ./ci/Dockerfile
     cpu: 2
     memory: 4096
-
 task:
   name: task with a high-performance container
   container:

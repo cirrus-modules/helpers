@@ -5,7 +5,6 @@ task:
     memory: 4096
   junit_artifacts:
     path: junit.xml
-
 task:
   name: artifacts instruction with type and format
   container:

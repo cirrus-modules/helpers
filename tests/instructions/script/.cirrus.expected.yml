@@ -5,7 +5,6 @@ task:
     memory: 4096
   single_script:
     - echo "step 1"
-
 task:
   name: script instruction with multiple commands
   container:
