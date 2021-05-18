@@ -5,7 +5,7 @@ Helper function for creating Cirrus Tasks
 Here is an exmaple of how helper function can be used for generating a [golangci-lint](https://github.com/golangci/golangci-lint) task:
 
 ```python
-load("github.com/cirrus-templates/helpers", "task", "container", "script", "always", "artifacts")
+load("github.com/cirrus-modules/helpers", "task", "container", "script", "always", "artifacts")
 
 def main(ctx):
     return [
