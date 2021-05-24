@@ -10,7 +10,8 @@ def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
         result['alias'] = alias
     result.update(instance.items())
     for instruction in instructions:
-        result.update(instruction.items())
+        if instruction:
+            result.update(instruction.items())
     return result
 
 
