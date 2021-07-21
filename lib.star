@@ -1,3 +1,6 @@
+load("cirrus", environ="env")  # <- avoid name clash for env
+
+
 def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     result = {
         'name': name,
@@ -69,3 +72,28 @@ def on_failure(instruction):
 
 def on_success(instruction):
     return {'on_success': instruction}
+
+
+def github_deep_clone(env=None):
+    """Cirrus CI uses go-git for single-branch clones, but some tools might
+    expect the '.git' dir to be populated exactly as it is done by default via
+    the `git` command.
+
+    This function uses a pre-installed git executable to perform a github clone
+    for those use cases.
+    """
+    env = env or environ  # <- allows overwriting env (facilitates testing)
+    pr = env.get("CIRRUS_PR")
+
+    if pr == None or pr == "":
+        commands = [
+            "git clone --recursive --branch=%(CIRRUS_BRANCH)s https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git %(CIRRUS_WORKING_DIR)s" % env,
+            "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % env,
+        ]
+    else:
+        commands = [
+            "git clone --recursive https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git %(CIRRUS_WORKING_DIR)s" % env,
+            "git fetch origin pull/%(CIRRUS_PR)s/head:pull/%(CIRRUS_PR)s" % env,
+            "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % env,
+        ]
+    return script("clone", *commands)
