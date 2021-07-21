@@ -109,5 +109,6 @@ def github_deep_clone(os="posix", env=None):
     return script("clone", *commands)
 
 def _env_var(name, os="posix"):
-    prefix, suffix = {"windows": ("%", "%"), "posix": ("${", "}")}.get(os) or fail("os=%r not supported" % os)
+    markers = {"windows": ("%", "%"), "posix": ("${", "}")}
+    prefix, suffix = markers.get(os) or fail("os=%r not supported" % os)
     return prefix + name + suffix
