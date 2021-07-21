@@ -17,5 +17,5 @@ def _task_without_pr():
     env.pop("CIRRUS_PR", None)
 
     return task("github_deep_clone without PR", container(), instructions=[
-        github_deep_clone(env)
+        github_deep_clone(env=env)
     ])
