@@ -74,15 +74,18 @@ def on_success(instruction):
     return {'on_success': instruction}
 
 
-def github_deep_clone(os="posix", env=None):
+DEFAULT_CLONE_URL = "https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git"
+
+
+def deep_clone_script(url=DEFAULT_CLONE_URL, os="posix", env=None):
     """Cirrus CI uses go-git for single-branch clones, but some tools might
     expect the '.git' dir to be populated exactly as it is done by default via
     the `git` command.
 
     This function uses a pre-installed git executable to perform a github clone
-    for those use cases. Please use `os="windows"` as argument if your CI
-    environment is not POSIX.
+    for those use cases. Please use `os="windows"` to create a CMD script.
     """
+
     env = env or environ  # <- allows overwriting env (facilitates testing)
     pr = env.get("CIRRUS_PR")
     names = [
@@ -94,15 +97,16 @@ def github_deep_clone(os="posix", env=None):
       "CIRRUS_BRANCH"
     ]
     clone_vars = {v: _env_var(v, os) for v in names}
+    clone_vars['CLONE_URL'] = url % clone_vars
 
     if pr == None or pr == "":
         commands = [
-            "git clone --recursive --branch=%(CIRRUS_BRANCH)s https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git %(CIRRUS_WORKING_DIR)s" % clone_vars,
+            "git clone --recursive --branch=%(CIRRUS_BRANCH)s %(CLONE_URL)s %(CIRRUS_WORKING_DIR)s" % clone_vars,
             "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % clone_vars,
         ]
     else:
         commands = [
-            "git clone --recursive https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git %(CIRRUS_WORKING_DIR)s" % clone_vars,
+            "git clone --recursive %(CLONE_URL)s %(CIRRUS_WORKING_DIR)s" % clone_vars,
             "git fetch origin pull/%(CIRRUS_PR)s/head:pull/%(CIRRUS_PR)s" % clone_vars,
             "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % clone_vars,
         ]
