@@ -1,3 +1,6 @@
+load("cirrus", environ="env")  # <- avoid name clash for env
+
+
 def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     result = {
         'name': name,
@@ -69,3 +72,61 @@ def on_failure(instruction):
 
 def on_success(instruction):
     return {'on_success': instruction}
+
+
+DEFAULT_CLONE_URL = "https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git"
+
+
+def use_deep_clone(existing_task, before=None, url=DEFAULT_CLONE_URL):
+    """Add `deep_clone_script` to an existing task.
+    By default, the custom `clone_script` is inserted before the first script in the
+    task, but you can customize that by providing a instruction name using the `before`
+    parameter, e.g., `before="pip_cache"` or `before="run_script"`.
+    """
+    task_items = existing_task.items()
+    for i, (key, value) in enumerate(task_items):
+        if (before == None and key.endswith('_script')) or key == before:
+            break
+    os = "windows" if "windows_container" in existing_task else "posix"
+    return dict(task_items[:i] + deep_clone_script(url, os).items() + task_items[i:])
+
+
+def deep_clone_script(url=DEFAULT_CLONE_URL, os="posix", env=None):
+    """Cirrus CI uses go-git for single-branch clones, but some tools might
+    expect the '.git' dir to be populated exactly as it is done by default via
+    the `git` command.
+
+    This function uses a pre-installed git executable to perform a github clone
+    for those use cases. Please use `os="windows"` to create a CMD script.
+    """
+
+    env = env or environ  # <- allows overwriting env (facilitates testing)
+    pr = env.get("CIRRUS_PR")
+    names = [
+      "CIRRUS_PR",
+      "CIRRUS_REPO_CLONE_TOKEN",
+      "CIRRUS_REPO_FULL_NAME",
+      "CIRRUS_WORKING_DIR",
+      "CIRRUS_CHANGE_IN_REPO",
+      "CIRRUS_BRANCH"
+    ]
+    clone_vars = {v: _env_var(v, os) for v in names}
+    clone_vars['CLONE_URL'] = url % clone_vars
+
+    if pr == None or pr == "":
+        commands = [
+            "git clone --recursive --branch=%(CIRRUS_BRANCH)s %(CLONE_URL)s %(CIRRUS_WORKING_DIR)s" % clone_vars,
+            "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % clone_vars,
+        ]
+    else:
+        commands = [
+            "git clone --recursive %(CLONE_URL)s %(CIRRUS_WORKING_DIR)s" % clone_vars,
+            "git fetch origin pull/%(CIRRUS_PR)s/head:pull/%(CIRRUS_PR)s" % clone_vars,
+            "git reset --hard %(CIRRUS_CHANGE_IN_REPO)s" % clone_vars,
+        ]
+    return script("clone", *commands)
+
+def _env_var(name, os="posix"):
+    markers = {"windows": ("%", "%"), "posix": ("${", "}")}
+    prefix, suffix = markers.get(os) or fail("os=%r not supported" % os)
+    return prefix + name + suffix

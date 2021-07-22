@@ -1,0 +1,28 @@
+task:
+  name: deep_clone_script with PR
+  container:
+    cpu: 2
+    memory: 4096
+  clone_script:
+    - git clone --recursive https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git ${CIRRUS_WORKING_DIR}
+    - git fetch origin pull/${CIRRUS_PR}/head:pull/${CIRRUS_PR}
+    - git reset --hard ${CIRRUS_CHANGE_IN_REPO}
+task:
+  name: deep_clone_script without PR
+  container:
+    cpu: 2
+    memory: 4096
+  clone_script:
+    - git clone --recursive --branch=${CIRRUS_BRANCH} https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git ${CIRRUS_WORKING_DIR}
+    - git reset --hard ${CIRRUS_CHANGE_IN_REPO}
+task:
+  name: Windows (windowsservercore 2019)
+  windows_container:
+    image: python:3.8-windowsservercore
+    os_version: 2019
+  clone_script:
+    - git clone --recursive https://x-access-token:%CIRRUS_REPO_CLONE_TOKEN%@github.com/%CIRRUS_REPO_FULL_NAME%.git %CIRRUS_WORKING_DIR%
+    - git fetch origin pull/%CIRRUS_PR%/head:pull/%CIRRUS_PR%
+    - git reset --hard %CIRRUS_CHANGE_IN_REPO%
+  test_script:
+    - python3 -c 'import sys; print(sys.version)'
