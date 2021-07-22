@@ -77,6 +77,20 @@ def on_success(instruction):
 DEFAULT_CLONE_URL = "https://x-access-token:%(CIRRUS_REPO_CLONE_TOKEN)s@github.com/%(CIRRUS_REPO_FULL_NAME)s.git"
 
 
+def use_deep_clone(existing_task, before=None, url=DEFAULT_CLONE_URL):
+    """Add `deep_clone_script` to an existing task.
+    By default, the custom `clone_script` is inserted before the first script in the
+    task, but you can customize that by providing a instruction name using the `before`
+    parameter, e.g., `before="pip_cache"` or `before="run_script"`.
+    """
+    task_items = existing_task.items()
+    for i, (key, value) in enumerate(task_items):
+        if (before == None and key.endswith('_script')) or key == before:
+            break
+    os = "windows" if "windows_container" in existing_task else "posix"
+    return dict(task_items[:i] + deep_clone_script(url, os).items() + task_items[i:])
+
+
 def deep_clone_script(url=DEFAULT_CLONE_URL, os="posix", env=None):
     """Cirrus CI uses go-git for single-branch clones, but some tools might
     expect the '.git' dir to be populated exactly as it is done by default via
