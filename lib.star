@@ -113,7 +113,7 @@ def macos_instance(image, **kwargs):
 
 def freebsd_instance(image_family="", image_name="", **kwargs):
     """https://cirrus-ci.org/guide/FreeBSD"""
-    spec = dict(kwargs)
+    spec = dict(kwargs.items())
     if image_family != "":
         spec["image_family"] = image_family
     if image_name != "":
