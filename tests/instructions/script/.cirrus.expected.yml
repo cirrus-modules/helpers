@@ -13,3 +13,10 @@ task:
   multiple_script:
     - echo "step 1"
     - echo "step 2"
+task:
+  name: background script
+  container:
+    cpu: 2
+    memory: 4096
+  start_emulator_background_script:
+    - emulator -avd test -no-audio -no-window

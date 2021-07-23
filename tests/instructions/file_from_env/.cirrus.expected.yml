@@ -1,0 +1,20 @@
+task:
+  name: test file_from_env
+  env:
+    DOCKER_CONFIG: ENCRYPTED[qwerty]
+  container:
+    cpu: 2
+    memory: 4096
+  docker_config_file:
+    path: /root/.docker/config
+    variable_name: DOCKER_CONFIG
+task:
+  name: test named file_from_env
+  env:
+    DOCKER_CONFIG: ENCRYPTED[qwerty]
+  container:
+    cpu: 2
+    memory: 4096
+  mydocker_file:
+    path: /root/.docker/config
+    variable_name: DOCKER_CONFIG

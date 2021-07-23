@@ -36,6 +36,21 @@ def script(name, *lines):
     }
 
 
+def background(name, *lines):
+    """Variation of `script`, but runs in background
+    https://cirrus-ci.org/guide/writing-tasks/#background-script-instruction
+    """
+    return {name + '_background_script': lines}
+
+
+def powershell(name, *lines):
+    """Variation of `script`, but uses PowerShell for Windows containers.
+    https://cirrus-ci.org/guide/windows/#powershell-support
+    """
+    instructions = [{"ps": l} for l in lines]
+    return {name + '_script': instructions}
+
+
 def artifacts(name, path, type="", format=""):
     result = {
         'path': path,
@@ -46,6 +61,22 @@ def artifacts(name, path, type="", format=""):
         result['format'] = format
     return {
         name + '_artifacts': result
+    }
+
+
+def file_from_env(var, path, name=""):
+    """Create a file from an environment variable (specially useful with encrypted vars).
+    This function automatically derives the instruction name from the variable name
+    (e.g.: `var=SERVER_CONFIG` will create a `server_config_file` instruction),
+    unless the `name` argument is given (e.g. `name=servercfg` will create a `servercfg_file` instruction).
+    https://cirrus-ci.org/guide/writing-tasks/#file-instruction
+    """
+    name = var.lower() if name == "" else name
+    return {
+        ("%s_file" % name): {
+            "path": path,
+            "variable_name": var
+        }
     }
 
 

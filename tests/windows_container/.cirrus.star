@@ -1,4 +1,4 @@
-load("../../lib.star", "task", "windows_container")
+load("../../lib.star", "task", "windows_container", "powershell")
 
 def main(ctx):
     return [
@@ -6,5 +6,6 @@ def main(ctx):
         task("task custom windows container",
              windows_container("cirrusci/windowsservercore:visualstudio2019")),
         task("task custom windows container custom version",
-             windows_container("python:3.8-windowsservercore", "2019")),
+             windows_container("python:3.8-windowsservercore", "2019"),
+             instructions=[powershell("debug", "Get-Location")])
     ]

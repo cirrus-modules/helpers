@@ -11,3 +11,5 @@ task:
   windows_container:
     image: python:3.8-windowsservercore
     os_version: "2019"
+  debug_script:
+    - ps: Get-Location
