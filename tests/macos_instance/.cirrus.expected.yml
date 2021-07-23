@@ -1,0 +1,4 @@
+task:
+  name: macos task
+  macos_instance:
+    image: big-sur-xcode
