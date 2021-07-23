@@ -1,0 +1,8 @@
+task:
+  name: freebsd task
+  freebsd_instance:
+    image_family: freebsd-13-0
+task:
+  name: freebsd task with image_name
+  freebsd_instance:
+    image_name: family/freebsd-13-0

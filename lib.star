@@ -49,7 +49,8 @@ def artifacts(name, path, type="", format=""):
     }
 
 
-def container(image="", dockerfile="", cpu=2.0, memory=4096):
+def container(image="", dockerfile="", cpu=2.0, memory=4096, **kwargs):
+    """https://cirrus-ci.org/guide/linux"""
     result = dict()
     if image != "":
         result['image'] = image
@@ -57,9 +58,36 @@ def container(image="", dockerfile="", cpu=2.0, memory=4096):
         result['dockerfile'] = dockerfile
     result['cpu'] = cpu
     result['memory'] = memory
+    result.update(kwargs)
     return {
         'container': result
     }
+
+
+def windows_container(image="cirrusci/windowsservercore", os_version="", **kwargs):
+    """https://cirrus-ci.org/guide/windows"""
+    spec = {"image": image}
+    if os_version != "":
+        spec["os_version"] = os_version
+    spec.update(kwargs)
+    return {"windows_container": spec}
+
+
+def macos_instance(image, **kwargs):
+    """https://cirrus-ci.org/guide/macOS"""
+    spec = {"image": image}
+    spec.update(kwargs)
+    return {"macos_instance": spec}
+
+
+def freebsd_instance(image_family="", image_name="", **kwargs):
+    """https://cirrus-ci.org/guide/FreeBSD"""
+    spec = dict(kwargs)
+    if image_family != "":
+        spec["image_family"] = image_family
+    if image_name != "":
+        spec["image_name"] = image_name
+    return {"freebsd_instance": spec}
 
 
 def always(instruction):

@@ -1,0 +1,13 @@
+task:
+  name: task default windows container
+  windows_container:
+    image: cirrusci/windowsservercore
+task:
+  name: task custom windows container
+  windows_container:
+    image: cirrusci/windowsservercore:visualstudio2019
+task:
+  name: task custom windows container custom version
+  windows_container:
+    image: python:3.8-windowsservercore
+    os_version: "2019"
