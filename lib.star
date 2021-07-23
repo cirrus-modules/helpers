@@ -31,22 +31,27 @@ def cache(name, folder, fingerprint_script=[], populate_script=[]):
 
 
 def script(name, *lines):
-    return {
-        name + '_script': lines
-    }
+    if len(lines) > 0:
+        return {name + '_script': lines}
+    return {'script': name}
 
 
 def background(name, *lines):
     """Variation of `script`, but runs in background
     https://cirrus-ci.org/guide/writing-tasks/#background-script-instruction
     """
-    return {name + '_background_script': lines}
+    if len(lines) > 0:
+        return {name + '_background_script': lines}
+    return {'background_script': name}
 
 
 def powershell(name, *lines):
     """Variation of `script`, but uses PowerShell for Windows containers.
     https://cirrus-ci.org/guide/windows/#powershell-support
     """
+    if len(lines) == 0:
+        return {'script': [{"ps": name}]}
+
     instructions = [{"ps": l} for l in lines]
     return {name + '_script': instructions}
 

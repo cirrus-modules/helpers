@@ -13,3 +13,10 @@ task:
     os_version: "2019"
   debug_script:
     - ps: Get-Location
+task:
+  name: task with unnamed powershell script
+  windows_container:
+    image: python:3.8-windowsservercore
+    os_version: "2019"
+  script:
+    - ps: Get-Location
