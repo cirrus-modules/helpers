@@ -18,6 +18,29 @@ def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
     return result
 
 
+def pipe(name, steps=(), resources=None):
+    """Create a Docker Pipe that executes each instruction in its own container
+    https://cirrus-ci.org/guide/docker-pipe/
+
+    `steps` should be a dict: each key is a Docker image name its associated
+    value is a list of instructions. When repeated images are required an
+    equivalent list of 2-tuples, (similar to `dict.items()`) can also be used.
+    """
+    spec = {'name': name}
+    if resources != None:
+        spec['resources'] = resources
+
+    steps_list = steps.items() if type(steps) == "dict" else steps
+    spec['steps'] = []
+    for image, instructions in steps_list:
+        step = {'image': image}
+        items = [instructions] if type(instructions) != "list" else instructions
+        for item in items:
+            step.update(item)
+        spec['steps'].append(step)
+    return {'pipe': spec}
+
+
 def cache(name, folder, fingerprint_script=[], populate_script=[]):
     cache_obj = {'folder': folder}
     if len(fingerprint_script) > 0:

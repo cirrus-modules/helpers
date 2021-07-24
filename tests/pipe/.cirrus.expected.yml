@@ -1,0 +1,14 @@
+pipe:
+  name: Build Site and Validate Links
+  resources:
+    cpu: 2.5
+    memory: 5G
+  steps:
+    - image: squidfunk/mkdocs-material:latest
+      build_script:
+        - mkdocs build
+    - image: raviqqe/liche:latest
+      validate_script:
+        - /liche --document-root=site --recursive site/
+      finish_script:
+        - echo DONE
