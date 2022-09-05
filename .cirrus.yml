@@ -1,5 +1,5 @@
 task:
   name: Test
   container:
-    image: cirrusci/cirrus-cli:latest
+    image: gcr.io/cirrus-ci-community/cirrus-cli:latest
   script: cirrus internal test
