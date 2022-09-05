@@ -1,0 +1,22 @@
+task:
+  name: task with a default ARM container
+  arm_container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with a container instantiated from debian:latest image
+  arm_container:
+    image: debian:latest
+    cpu: 2
+    memory: 4096
+task:
+  name: task with a container built from Dockerfile
+  arm_container:
+    dockerfile: ./ci/Dockerfile
+    cpu: 2
+    memory: 4096
+task:
+  name: task with a high-performance container
+  arm_container:
+    cpu: 16
+    memory: 16384

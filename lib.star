@@ -108,8 +108,7 @@ def file_from_env(var, path, name=""):
     }
 
 
-def container(image="", dockerfile="", cpu=2.0, memory=4096, **kwargs):
-    """https://cirrus-ci.org/guide/linux"""
+def _container(arm=False, image="", dockerfile="", cpu=2.0, memory=4096, **kwargs):
     result = dict()
     if image != "":
         result['image'] = image
@@ -119,8 +118,18 @@ def container(image="", dockerfile="", cpu=2.0, memory=4096, **kwargs):
     result['memory'] = memory
     result.update(kwargs)
     return {
-        'container': result
+        ('arm_container' if arm else 'container'): result
     }
+
+
+def container(*args, **kwargs):
+    """https://cirrus-ci.org/guide/linux"""
+    return _container(False, *args, **kwargs)
+
+
+def arm_container(*args, **kwargs):
+    """https://cirrus-ci.org/guide/linux"""
+    return _container(True, *args, **kwargs)
 
 
 def windows_container(image="cirrusci/windowsservercore", os_version="", **kwargs):
