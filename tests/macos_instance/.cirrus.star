@@ -1,4 +1,4 @@
-load("../../lib.star", "macos_instance", "task")
+load("../../lib.star", "task", "macos_instance")
 
 def main(ctx):
     return [
