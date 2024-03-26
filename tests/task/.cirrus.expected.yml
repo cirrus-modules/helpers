@@ -11,6 +11,74 @@ task:
     cpu: 2
     memory: 4096
 task:
+  name: task with 'allow_failures'
+  allow_failures: true
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'auto_cancellation'
+  auto_cancellation: true
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'execution_lock'
+  execution_lock: $CIRRUS_BRANCH
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'only_if'
+  only_if: $CIRRUS_BRANCH == 'master'
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'required_pr_labels' as string
+  required_pr_labels: initial-review
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'required_pr_labels' as list
+  required_pr_labels:
+    - initial-review
+    - ready-for-staging
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'skip'
+  skip: '!changesInclude(''.cirrus.yml'', ''**.{js,ts}'')'
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'skip_notifications'
+  skip_notifications: true
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'stateful'
+  stateful: true
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'timeout_in'
+  timeout_in: 90m
+  container:
+    cpu: 2
+    memory: 4096
+task:
+  name: task with 'trigger_type'
+  trigger_type: manual
+  container:
+    cpu: 2
+    memory: 4096
+task:
   name: task with a cache instruction
   container:
     cpu: 2
