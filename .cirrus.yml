@@ -2,4 +2,10 @@ task:
   name: Test
   container:
     image: ghcr.io/cirruslabs/cirrus-cli:latest
-  script: cirrus internal test
+  test_script: cirrus internal test
+  setup_buildifier_script: |
+    apk add go
+    go install github.com/bazelbuild/buildtools/buildifier@latest
+    echo "PATH=$HOME/go/bin:$PATH" >> $CIRRUS_ENV
+  format_script: buildifier -mode check -r .
+  lint_script: buildifier --lint warn --warnings -function-docstring,-function-docstring-return,-function-docstring-header,-function-docstring-args,-module-docstring -r .
