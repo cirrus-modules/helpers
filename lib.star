@@ -1,16 +1,52 @@
 load("cirrus", environ="env")  # <- avoid name clash for env
 
 
-def task(name, instance, env={}, instructions=[], depends_on=[], alias=""):
+def task(
+        name,
+        instance,
+        env = {},
+        instructions = [],
+        depends_on = [],
+        alias = "",
+        allow_failures = None,
+        auto_cancellation = None,
+        execution_lock = None,
+        only_if = None,
+        required_pr_labels = None,
+        skip = None,
+        skip_notifications = None,
+        stateful = None,
+        timeout_in = None,
+        trigger_type = None,):
     result = {
         'name': name,
     }
     if env:
-        result["env"] = env
+        result['env'] = env
     if depends_on:
-        result["depends_on"] = depends_on
-    if alias != "":
+        result['depends_on'] = depends_on
+    if alias != '':
         result['alias'] = alias
+    if allow_failures:
+        result['allow_failures'] = allow_failures
+    if auto_cancellation:
+        result['auto_cancellation'] = auto_cancellation
+    if execution_lock:
+        result['execution_lock'] = execution_lock
+    if only_if:
+        result['only_if'] = only_if
+    if required_pr_labels:
+        result['required_pr_labels'] = required_pr_labels
+    if skip:
+        result['skip'] = skip
+    if skip_notifications:
+        result['skip_notifications'] = skip_notifications
+    if stateful:
+        result['stateful'] = stateful
+    if timeout_in:
+        result['timeout_in'] = timeout_in
+    if trigger_type:
+        result['trigger_type'] = trigger_type
     result.update(instance.items())
     for instruction in instructions:
         if instruction:
