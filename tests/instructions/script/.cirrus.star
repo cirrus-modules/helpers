@@ -1,6 +1,6 @@
 load("../../../lib.star", "background", "container", "script", "task")
 
-def main(ctx):
+def main():
     return [
         task("script instruction with single command", container(), instructions = [
             script("single", "echo \"step 1\""),

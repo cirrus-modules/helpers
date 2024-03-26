@@ -1,6 +1,6 @@
 load("../../lib.star", "powershell", "task", "windows_container")
 
-def main(ctx):
+def main():
     return [
         task("task default windows container", windows_container()),
         task(

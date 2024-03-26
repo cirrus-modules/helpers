@@ -1,6 +1,6 @@
 load("../../lib.star", "always", "artifacts", "cache", "container", "on_failure", "on_success", "script", "task")
 
-def main(ctx):
+def main():
     return [
         task("task with a default container", container()),
         task("task with an environment", container(), env = {"A": "B"}),

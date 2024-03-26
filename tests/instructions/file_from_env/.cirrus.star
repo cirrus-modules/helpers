@@ -1,6 +1,6 @@
 load("../../../lib.star", "container", "file_from_env", "task")
 
-def main(ctx):
+def main():
     return [
         task(
             "test file_from_env",

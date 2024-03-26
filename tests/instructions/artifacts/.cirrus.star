@@ -1,6 +1,6 @@
 load("../../../lib.star", "artifacts", "container", "task")
 
-def main(ctx):
+def main():
     return [
         task("basic artifacts instruction", container(), instructions = [
             artifacts("junit", "junit.xml"),

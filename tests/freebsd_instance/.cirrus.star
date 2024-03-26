@@ -1,6 +1,6 @@
 load("../../lib.star", "freebsd_instance", "task")
 
-def main(ctx):
+def main():
     return [
         task("freebsd task", freebsd_instance("freebsd-13-0")),
         task(

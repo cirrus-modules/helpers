@@ -1,6 +1,6 @@
 load("../../lib.star", "arm_container", "task")
 
-def main(ctx):
+def main():
     return [
         task("task with a default ARM container", arm_container()),
         task("task with a container instantiated from debian:latest image", arm_container("debian:latest")),

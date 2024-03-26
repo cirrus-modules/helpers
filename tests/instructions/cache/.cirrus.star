@@ -1,6 +1,6 @@
 load("../../../lib.star", "cache", "container", "task")
 
-def main(ctx):
+def main():
     return [
         task("basic cache instruction", container(), instructions = [
             cache("node_modules", "node_modules"),

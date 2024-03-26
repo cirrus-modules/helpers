@@ -1,6 +1,6 @@
 load("../../lib.star", "container", "task")
 
-def main(ctx):
+def main():
     return [
         task("task with a default container", container()),
         task("task with a container instantiated from debian:latest image", container("debian:latest")),

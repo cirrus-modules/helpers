@@ -105,7 +105,7 @@ def powershell(name, *lines):
     if len(lines) == 0:
         return {"script": [{"ps": name}]}
 
-    instructions = [{"ps": l} for l in lines]
+    instructions = [{"ps": line} for line in lines]
     return {name + "_script": instructions}
 
 def artifacts(name, path, type = "", format = ""):
@@ -197,7 +197,7 @@ def use_deep_clone(existing_task, before = None, url = DEFAULT_CLONE_URL):
     parameter, e.g., `before="pip_cache"` or `before="run_script"`.
     """
     task_items = existing_task.items()
-    for i, (key, value) in enumerate(task_items):
+    for i, (key, _) in enumerate(task_items):
         if (before == None and key.endswith("_script")) or key == before:
             break
     os = "windows" if "windows_container" in existing_task else "posix"
