@@ -196,12 +196,14 @@ def use_deep_clone(existing_task, before = None, url = DEFAULT_CLONE_URL):
     task, but you can customize that by providing a instruction name using the `before`
     parameter, e.g., `before="pip_cache"` or `before="run_script"`.
     """
+    idx = 0
     task_items = existing_task.items()
     for i, (key, _) in enumerate(task_items):
         if (before == None and key.endswith("_script")) or key == before:
+            idx = i
             break
     os = "windows" if "windows_container" in existing_task else "posix"
-    return dict(task_items[:i] + deep_clone_script(url, os).items() + task_items[i:])
+    return dict(task_items[:idx] + deep_clone_script(url, os).items() + task_items[idx:])
 
 def deep_clone_script(url = DEFAULT_CLONE_URL, os = "posix", env = None):
     """Cirrus CI uses go-git for single-branch clones, but some tools might

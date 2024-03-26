@@ -1,5 +1,5 @@
-load("cirrus", environ = "env")
 load("../../../lib.star", "container", "deep_clone_script", "script", "task")
+load("cirrus", environ = "env")
 
 def main():
     return [
